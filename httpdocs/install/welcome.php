@@ -21,9 +21,15 @@
       <div class="card">
         <div class="card-content">
           <div class="content">
+            <?php
+            error_reporting(E_ERROR | E_PARSE);
+            if($_GET["e"] == "1"){
+              echo '<div class="tag is-danger is-light"><br>Connection error</div> ';
+            }
+            ?>
             Server MySQL
             <form action="createconfigfile.php" method="POST">
-              <div class="field"><br>
+              <div class="field">
                 <label class="label">Hostname</label>
                 <div class="control">
                   <input class="input" type="text" name="sqlhost" id="sqlhost" placeholder="">

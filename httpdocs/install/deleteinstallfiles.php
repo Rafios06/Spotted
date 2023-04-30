@@ -13,7 +13,11 @@ function delTree($dir) {
     return rmdir($dir);
   }
 
-// delTree("../install");
-printf("delete install folder");
+delTree("../install");
+printf("Success!");
+
+// Goto to deleteinstallfiles.php
+header("Location: ../index.php");
+die();
 ?>
 

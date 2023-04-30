@@ -8,7 +8,11 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password);
 
-printf("Success... %s\n", mysqli_get_host_info($mysqli));
+// Check connection MySQL
+if (!$mysqli) {
+    error_log('Connection error: ' . mysqli_connect_error());
+	die();
+}
 
 // Create db
 $result = $mysqli->query("CREATE DATABASE `spotteddb` /*!40100 COLLATE 'latin1_swedish_ci' */");

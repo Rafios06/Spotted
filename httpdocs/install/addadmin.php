@@ -31,7 +31,7 @@ $stmt = $mysqli->prepare("INSERT INTO user (User_Type, User_Username, User_Passw
 $stmt->bind_param("issss", $profil, $username, $password_hash, $email, $time);
 $stmt->execute();
 
-printf("Success... %s\n", mysqli_get_host_info($mysqli));
+printf("Success... deleteinstallfiles%s\n", mysqli_get_host_info($mysqli));
 
 // Goto to deleteinstallfiles.php
 header("Location: deleteinstallfiles.php");

@@ -7,8 +7,19 @@ $password = $_POST["sqlpass"];
 
 // Check if not empty
 if("" == trim($hostname) || "" == trim($username) || "" == trim($password)){
-    printf("exit");
+    header("Location: welcome.php?e=1");
     exit();
+}
+
+// Check connection MySQL
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+$mysqli = mysqli_connect($hostname, $username, $password);
+
+// Check connection MySQL
+if (!$mysqli) {
+    header("Location: welcome.php?e=1");
+	die();
 }
 
 // Write config server SQL
