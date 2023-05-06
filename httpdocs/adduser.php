@@ -17,7 +17,7 @@ $password = $_POST["upassword"];
 $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
 // Check if not empty
-if("" == trim($username) || "" == trim($password_hash) || "" == trim($email)){
+if ("" == trim($username) || "" == trim($password_hash) || "" == trim($email)) {
     // Goto to register.php with Error
     header("Location: register.php?e=1");
     exit();
@@ -44,10 +44,15 @@ if ($result->num_rows == 0) {
 
         // Goto to register.php with Success
         header("Location: register.php?e=0");
+        exit();
     }
 } else {
     // Goto to register.php with Error
     header("Location: register.php?e=1");
+    exit();
 }
 
+// Goto to register.php with Error
+header("Location: register.php?e=1");
+exit();
 die();
