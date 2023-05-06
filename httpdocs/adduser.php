@@ -18,7 +18,8 @@ $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
 // Check if not empty
 if("" == trim($username) || "" == trim($password_hash) || "" == trim($email)){
-    printf("exit");
+    // Goto to register.php with Error
+    header("Location: register.php?e=1");
     exit();
 }
 
