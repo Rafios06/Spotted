@@ -7,7 +7,7 @@ session_start();
 if (isset($_SESSION["login"])) {
     // Goto to hello.php
     header("Location: hello.php");
-    //exit();
+    exit();
 }
 
 // Open a connection to a MySQL Server
@@ -44,6 +44,7 @@ if ($result->num_rows > 0) {
 
         // Goto to hello.php
         header("Location: hello.php");
+        exit();
     } else {
         echo 'Invalid password.';
     }

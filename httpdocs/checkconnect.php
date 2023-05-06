@@ -7,5 +7,5 @@ if (isset($_SESSION["login"])) {
 }
 
 // Goto to login.php
-header("Location: login.php");
+header("Location: login.php?e=1");
 die();
