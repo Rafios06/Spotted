@@ -8,22 +8,50 @@
 
 <body>
 
-    <form action="newsignal.php" method="POST">
+    <form action="addsignal.php" method="POST">
         <div>
-            <label for="uusername">Frequency</label>
-            <input type="text" name="uusername" id="uusername" required>
+            <label for="sfrequency">Frequency</label>
+            <input type="text" name="sfrequency" id="sfrequency" required>
+            <select name="sfrequencyunit" id="sfrequencyunit">
+                <option value="GHz">GHz</option>
+                <option value="MHz" selected>MHz</option>
+                <option value="kHz">kHz</option>
+                <option value="Hz">Hz</option>
+            </select>
+
         </div>
 
         <div>
-            <label for="uemail">Email</label>
-            <input type="email" name="uemail" id="uemail" required>
+            <label for="stime">Time (UTC)</label>
+            <input type="text" name="stime" id="stime" required>
         </div>
 
         <div>
-            <label for="upassword">Password</label>
-            <input type="password" name="upassword" id="upassword" required>
+            <label for="sreceiver">Receiver</label>
+            <input type="text" name="sreceiver" id="sreceiver" required>
         </div>
-        <input type="submit" value="Subscribe!">
+
+        <div>
+            <label for="snoise">S/N</label>
+            <input type="text" name="snoise" id="snoise" required>
+        </div>
+
+        <div>
+            <label for="scomment">Comment</label>
+            <input type="text" name="scomment" id="scomment" required>
+        </div>
+
+        <div>
+            <label for="slink">Link sample</label>
+            <input type="text" name="slink" id="slink" required>
+        </div>
+
+        <div>
+            <label for="sprivate">Private</label>
+            <input type="checkbox" name="sprivate" id="sprivate">
+        </div>
+
+        <input type="submit" value="Add">
     </form>
 
 </body>

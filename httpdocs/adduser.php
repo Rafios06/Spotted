@@ -30,9 +30,6 @@ if ($result->num_rows == 0) {
     // Check if email not existing
     $result = $mysqli->query("SELECT User_ID FROM user WHERE User_Email = '" . $email . "'");
     if ($result->num_rows == 0) {
-        // row not found, do stuff...
-        printf("row not found %i", $result->num_rows);
-
         // Get time
         date_default_timezone_set('UTC');
         $time = date("Y-m-d H:i:s") . " UTC";
