@@ -38,6 +38,16 @@ $result = $mysqli->query("CREATE TABLE `signal` (
 	`Signal_AutoReport` LONGTEXT NULL,
 	PRIMARY KEY (`Signal_ID`))");
 
+// Create receiver table
+$result = $mysqli->query("CREATE TABLE `receiver` (
+	`Receiver_ID` INT NOT NULL AUTO_INCREMENT,
+	`Receiver_Owner_ID` INT NULL DEFAULT '-1',
+	`Receiver_Title` TEXT NULL,
+	`Receiver_Location` TEXT NULL,
+	`Receiver_Device` LONGTEXT NULL,
+	`Receiver_Antenna` LONGTEXT NULL,
+	PRIMARY KEY (`Receiver_ID`))");
+
 // Send info to createadmin.php
 header("Location: createadmin.php");
 die();

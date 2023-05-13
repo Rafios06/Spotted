@@ -1,11 +1,7 @@
 <?php
 
 // Check if already connected
-session_start();
-if (isset($_SESSION["login"])) {
+if (!isset($_SESSION["login"]) || empty($_SESSION["login"])) {
+    header("Location: login.php?e=1"); // Goto to login.php
     exit();
 }
-
-// Goto to login.php
-header("Location: login.php?e=1");
-die();

@@ -1,5 +1,6 @@
 <?php
 
+require("checkconnect.php");
 require("configsql.php");
 
 // Open a connection to a MySQL Server
@@ -7,7 +8,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password, 'spotteddb');
 
-// Get username, password and email from POST
+// Get info POST
 $sfrequency = $_POST["sfrequency"];
 $sfrequencyunit = $_POST["sfrequencyunit"];
 $stime = $_POST["stime"];
