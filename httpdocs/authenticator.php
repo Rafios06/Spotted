@@ -2,13 +2,16 @@
 
 require("configsql.php");
 
+// Start session
+session_start();
+session_regenerate_id();
+
 // Open a connection to a MySQL Server
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password, 'spotteddb');
 
 // Check if already connected
-session_start();
 if (isset($_SESSION["login"]) && !empty($_SESSION["login"])) {
     header("Location: hello.php");
     exit();
