@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Spotted.</title>
+    <title>Spotted - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <style>
         .hero {
@@ -80,9 +80,11 @@
                                 <hr class="solid">
                                 <div class="field">
                                     <div class="control">
-                                        <button class="button" style="font-weight: bolder; background-color: #77C7D9; color: white;">
-                                            S'inscrire
-                                        </button>
+                                        <form action="register.php">
+                                            <button class="button" style="font-weight: bolder; background-color: #77C7D9; color: white;">
+                                                S'inscrire!
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

@@ -46,8 +46,8 @@ if ($result->num_rows > 0) {
         $time = date("Y-m-d H:i:s") . " UTC";
         $stmt = $mysqli->query("UPDATE user SET User_LastSeen='" . $time . "' WHERE User_Username='" . $username . "'");
 
-        // Goto to hello.php
-        header("Location: hello.php");
+        // Goto to index.php
+        header("Location: index.php");
         exit();
     } else {
         echo 'Invalid password.';

@@ -39,8 +39,8 @@ if ($result->num_rows == 0) {
         $stmt->bind_param("issss", $profil, $username, $password_hash, $email, $time);
         $stmt->execute();
 
-        // Goto to register.php with Success
-        header("Location: register.php?e=0");
+        // Goto to login.php with Success
+        header("Location: login.php?e=0");
         exit();
     }
 } else {
