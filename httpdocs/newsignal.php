@@ -2,6 +2,7 @@
 
 require("checkconnect.php");
 require("configsql.php");
+require("getlists.php");
 
 ?>
 
@@ -81,11 +82,7 @@ require("configsql.php");
                     <input class="input" type="datetime-local" name="stime" id="stime" value="<?= date('Y-m-d H:i') ?>" required>
                 </div>
 
-                <div>
-                    <label class="label" for="sreceiver">Receiver</label>
-                    <input class="input" type="text" name="sreceiver" id="sreceiver" required>
-                </div>
-
+                <label class="label" for="sreceiver" style="margin-top: 0.5em;">Receiver</label>
                 <div class="field has-addons">
                     <p class="control">
                         <span class="select">
