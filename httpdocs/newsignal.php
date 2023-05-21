@@ -85,6 +85,7 @@ require("getlists.php");
                 <label class="label" for="sreceiver" style="margin-top: 0.5em;">Receiver</label>
                 <div class="field has-addons">
                     <p class="control">
+                        <?php generateSelectReceivers(); ?>
                         <span class="select">
                             <select name="sreceiver" id="sreceiver">
                                 <option value="----" selected>Create new receiver</option>
