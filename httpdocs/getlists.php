@@ -17,7 +17,7 @@ function generateSelectReceivers()
         do {
             $stmt->bind_result($id_receiver, $id_owner, $title_receiver, $location_receiver, $device_receiver, $antenna_receiver);
             if ($id_receiver !== null) {
-                echo $title_receiver . "<br>";
+                echo '<option value="'.$id_receiver.'">'.$title_receiver.'</option>';
             }
         } while ($row = $stmt->fetch());
     } else {

@@ -13,6 +13,8 @@ require("getlists.php");
     <meta charset="UTF-8">
     <title>Spotted - Add signal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
     </style>
 </head>
 
@@ -63,7 +65,7 @@ require("getlists.php");
                 <label class="label" for="sfrequency">Frequency</label>
                 <div class="field has-addons">
                     <p class="control">
-                        <input class="input" type="text" placeholder="Frequency" name="sfrequency" id="sfrequency" required>
+                        <input class="input" type="text" name="sfrequency" id="sfrequency" required>
                     </p>
                     <p class="control">
                         <span class="select">
@@ -85,12 +87,10 @@ require("getlists.php");
                 <label class="label" for="sreceiver" style="margin-top: 0.5em;">Receiver</label>
                 <div class="field has-addons">
                     <p class="control">
-                        <?php generateSelectReceivers(); ?>
                         <span class="select">
                             <select name="sreceiver" id="sreceiver">
                                 <option value="----" selected>Create new receiver</option>
-                                <option value="MHz">Home (SDRPLAY)</option>
-                                <option value="kHz">WEBSDR - University</option>
+                                <?php generateSelectReceivers(); ?>
                             </select>
                         </span>
                     </p>
@@ -99,14 +99,25 @@ require("getlists.php");
                     </p>
                 </div>
 
-                <div>
-                    <label class="label" for="snoise">S/N</label>
-                    <input class="input" type="text" name="snoise" id="snoise" required>
+                <label class="label" for="snoise">S/N</label>
+                <div class="field has-addons">
+                    <p class="control">
+                        <input class="input" type="text" name="snoise" id="snoise" required>
+                    </p>
+                    <p class="control">
+                        <button class="button">Bad</button>
+                    </p>
+                    <p class="control">
+                        <button class="button">Fair</button>
+                    </p>
+                    <p class="control">
+                        <button class="button">Excellent</button>
+                    </p>
                 </div>
 
                 <div>
                     <label class="label" for="scomment">Comment</label>
-                    <input class="input" type="text" name="scomment" id="scomment" required>
+                    <input class="input" type="textarea" name="scomment" id="scomment">
                 </div>
 
                 <div>
@@ -114,17 +125,30 @@ require("getlists.php");
                     <input class="input" type="text" name="slink" id="slink" required>
                 </div>
 
-                <div>
-                    <label class="label" for="sprivate">Private</label>
-                    <input type="checkbox" name="sprivate" id="sprivate">
+                <div style="margin-top: 0.5em; margin-bottom: 0.5em;">
+                    <label class="checkbox">
+                        <input type="checkbox" name="sprivate" id="sprivate">
+                        <a href="#">Private</a>
+                    </label>
                 </div>
 
-                <input type="submit" value="Add">
+                <input class="button" type="submit" value="Add">
             </form>
 
         </div>
     </div>
 
 </body>
+
+<script>
+    const easyMDE = new EasyMDE({
+        element: document.getElementById('scomment')
+    });
+
+    document.getElementById('sbrefreshlist').onclick = function() {
+        echo("eee");
+        window.location.reload();
+    };
+</script>
 
 </html>
