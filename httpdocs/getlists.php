@@ -21,7 +21,7 @@ function generateSelectReceivers()
             }
         } while ($row = $stmt->fetch());
     } else {
-        echo '';
+        echo '<option value="----" selected>Create new receiver</option>';
     }
 
     $stmt->close();

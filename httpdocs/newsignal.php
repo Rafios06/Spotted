@@ -81,7 +81,7 @@ require("getlists.php");
 
                 <div>
                     <label class="label" for="stime">Time (UTC)</label>
-                    <input class="input" type="datetime-local" name="stime" id="stime" value="<?= date('Y-m-d H:i') ?>" required>
+                    <input class="input" type="datetime-local" name="stime" id="stime" value="<?= date('Y-m-d H:i') ?>" style="max-width: 16em;" required>
                 </div>
 
                 <label class="label" for="sreceiver" style="margin-top: 0.5em;">Receiver</label>
@@ -89,13 +89,12 @@ require("getlists.php");
                     <p class="control">
                         <span class="select">
                             <select name="sreceiver" id="sreceiver">
-                                <option value="----" selected>Create new receiver</option>
                                 <?php generateSelectReceivers(); ?>
                             </select>
                         </span>
                     </p>
                     <p class="control">
-                        <button class="button">Create</button>
+                        <button type="button" class="button" onclick="location.href='newreceiver.php'">Create</button>
                     </p>
                 </div>
 
@@ -105,13 +104,13 @@ require("getlists.php");
                         <input class="input" type="text" name="snoise" id="snoise" required>
                     </p>
                     <p class="control">
-                        <button class="button">Bad</button>
+                        <button type="button" class="button" name="bbad" id="bbad">Bad</button>
                     </p>
                     <p class="control">
-                        <button class="button">Fair</button>
+                        <button type="button" class="button" name="bfair" id="bfair">Fair</button>
                     </p>
                     <p class="control">
-                        <button class="button">Excellent</button>
+                        <button type="button" class="button" name="bexcellent" id="bexcellent">Excellent</button>
                     </p>
                 </div>
 
@@ -128,7 +127,7 @@ require("getlists.php");
                 <div style="margin-top: 0.5em; margin-bottom: 0.5em;">
                     <label class="checkbox">
                         <input type="checkbox" name="sprivate" id="sprivate">
-                        <a href="#">Private</a>
+                        Private
                     </label>
                 </div>
 
@@ -145,9 +144,16 @@ require("getlists.php");
         element: document.getElementById('scomment')
     });
 
-    document.getElementById('sbrefreshlist').onclick = function() {
-        echo("eee");
-        window.location.reload();
+    document.getElementById('bbad').onclick = function() {
+        document.getElementById("snoise").value = "Bad";
+    };
+
+    document.getElementById('bfair').onclick = function() {
+        document.getElementById("snoise").value = "Fair";
+    };
+
+    document.getElementById('bexcellent').onclick = function() {
+        document.getElementById("snoise").value = "Excellent";
     };
 </script>
 
