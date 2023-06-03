@@ -116,7 +116,7 @@ require("getlists.php");
 
                 <div>
                     <label class="label" for="scomment">Comment</label>
-                    <input class="input" type="textarea" name="scomment" id="scomment">
+                    <textarea class="input" type="textarea" name="scomment" id="scomment"></textarea>
                 </div>
 
                 <div>
