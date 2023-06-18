@@ -3,13 +3,14 @@
 require("checkconnect.php");
 require("configsql.php");
 require("getlists.php");
+require("getreceiver.php");
 
 // Récupérer les informations du signal à afficher (par exemple à partir d'une base de données)
 $signalId = $_GET['id']; // Supposons que l'ID du signal est passé dans l'URL comme paramètre 'id'
 
 // Check if not empty
 if ("" == trim($signalId)) {
-    // Goto to newsignal.php with Error
+    // Goto to index.php with Error
     header("Location: index.php");
     exit();
 }
@@ -32,12 +33,19 @@ function getSignalDetails($userId, $signalId)
 
         if ($stmt->fetch()) {
             if ($Signal_Owner_ID === intval($userId) || $Signal_Owner_ID === -1) {
+                $obj_Signal_AutoReport = json_decode($Signal_AutoReport);
+
+                // Get receiver details
+                $receiverID = $obj_Signal_AutoReport->{'rcv'};
+                $detailsReceiver = getReceiverDetails($userId, $receiverID);
+                $infoReceiver = '<a href="receiver.php?id='.$receiverID.'">'.$detailsReceiver['title'] . ' (' . $detailsReceiver['location'] . ' | ' . $detailsReceiver['device'] . ' | ' . $detailsReceiver['antenna'] . ')'.'</a>';
+                
                 return array(
-                    'frequency' => '100 MHz',
-                    'time' => '2023-05-29 10:00:00',
-                    'receiver' => 'Receiver Name',
-                    'sn' => 'Fair',
-                    'comment' => nl2br($Signal_Description),
+                    'frequency' => $obj_Signal_AutoReport->{'fq'},
+                    'time' => $obj_Signal_AutoReport->{'time'},
+                    'receiver' => $infoReceiver,
+                    'sn' => $obj_Signal_AutoReport->{'sn'},
+                    'comment' =>$Signal_Description,
                     'link' => $Signal_Sample_Link
                 );
             }
@@ -67,15 +75,13 @@ $signalDetails = getSignalDetails($_SESSION['login'], $signalId);
     <meta charset="UTF-8">
     <title>Spotted - Signal Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
 
-<nav class="navbar is-light has-shadow">
+    <nav class="navbar is-light has-shadow">
         <div class="navbar-brand">
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link is-arrowless">
@@ -125,24 +131,24 @@ $signalDetails = getSignalDetails($_SESSION['login'], $signalId);
                 <p><strong>Link:</strong> <a href="<?= $signalDetails['link'] ?>" target="_blank"><?= $signalDetails['link'] ?></a></p>
                 <div>
                     <strong>Comment:</strong>
-                    <div id="comment-preview" style="margin: 0.2em; margin-bottom: 1em;"></div>
+                    <div id="comment-preview" style="margin: 0.2em; margin-bottom: 1em;"><?php echo $signalDetails['comment']; ?></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        const commentTextarea = `<?php echo $signalDetails['comment'];?>`;
+    <script type="text/javascript">
+        var mdp = window.markdownit({
+            breaks: true,
+            typographer: true
+        });
 
-        const easyMDE = new EasyMDE({
-            element: document.getElementById('comment-preview'),
-            initialValue: commentTextarea,
-            readOnly: true,
-            spellChecker: false,
-            renderingConfig: {
-                singleLineBreaks: true,
-                codeSyntaxHighlighting: true,
-            }
+        function render() {
+            $("#comment-preview").html(mdp.render($("#comment-preview").html()));
+        }
+
+        $(document).ready(function() {
+            render(); //render data as MarkDown
         });
     </script>
 

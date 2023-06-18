@@ -27,3 +27,5 @@ function generateSelectReceivers()
     $stmt->close();
     return '';
 }
+
+?>
