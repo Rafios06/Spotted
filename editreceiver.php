@@ -8,7 +8,8 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password, 'spotteddb');
 
-// Get info POST
+// Get info from POST
+$rID = $_POST["rID"];
 $rtitle = $_POST["rtitle"];
 $rlocation = $_POST["rlocation"];
 $rdevice = $_POST["rdevice"];
@@ -18,16 +19,17 @@ $rowner = intval($_SESSION["login"]);
 
 // Check if not empty
 if ("" == trim($rtitle) || "" == trim($rlocation) || "" == trim($rdevice) || "" == trim($rantenna)) {
-    // Goto to newreceiver.php with Error
+    // Go to newreceiver.php with an error
     header("Location: newreceiver.php?e=1");
     exit();
 }
 
 // Prepare & execute request
-$stmt = $mysqli->prepare("INSERT INTO `receiver` (Receiver_Owner_ID, Receiver_Title, Receiver_Location, Receiver_Device, Receiver_Antenna) VALUES (?,?,?,?,?)");
-$stmt->bind_param("issss", $rowner, $rtitle, $rlocation, $rdevice, $rantenna);
+$stmt = $mysqli->prepare("UPDATE `receiver` SET Receiver_Title=?, Receiver_Location=?, Receiver_Device=?, Receiver_Antenna=? WHERE Receiver_ID=? AND Receiver_Owner_ID=?");
+$stmt->bind_param("ssssii", $rtitle, $rlocation, $rdevice, $rantenna, $rID, $rowner);
 $stmt->execute();
 
-// Goto to newreceiver.php with Success
+// Go to newreceiver.php with Success
 header("Location: newreceiver.php?e=0");
 die();
+?>

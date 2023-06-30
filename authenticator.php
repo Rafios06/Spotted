@@ -13,7 +13,7 @@ $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password, 'spotteddb
 
 // Check if already connected
 if (isset($_SESSION["login"]) && !empty($_SESSION["login"])) {
-    header("Location: hello.php");
+    header("Location: index.php");
     exit();
 }
 

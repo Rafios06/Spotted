@@ -81,7 +81,7 @@ if ($editorMode) {
         <div class="card-content">
 
             <form action="<?php if ($editorMode) {echo 'editreceiver.php';} else {echo 'addreceiver.php';} ?>" method="POST">
-                <?php if ($editorMode) {echo '<input type="hidden" id="receiverId" name="receiverId" value="'.$receiverId.'" />';} ?>
+                <?php if ($editorMode) {echo '<input type="hidden" id="rID" name="rID" value="'.$receiverId.'" />';} ?>
                 
                 <div>
                     <label class="label" for="rtitle">Title</label>

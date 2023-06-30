@@ -2,21 +2,7 @@
 
 require("checkconnect.php");
 require("configsql.php");
-require("getlists.php");
-require("getreceiver.php");
-
-// Récupérer les informations du receiver à afficher (par exemple à partir d'une base de données)
-$receiverId = $_GET['id']; // Supposons que l'ID du receiver est passé dans l'URL comme paramètre 'id'
-
-// Check if not empty
-if ("" == trim($receiverId)) {
-    // Goto to index.php with Error
-    header("Location: index.php");
-    exit();
-}
-
-$userId = $_SESSION['login'];
-$receiverDetails = getReceiverDetails($_SESSION['login'], $receiverId);
+require("getuser.php");
 
 ?>
 
@@ -25,8 +11,9 @@ $receiverDetails = getReceiverDetails($_SESSION['login'], $receiverId);
 
 <head>
     <meta charset="UTF-8">
-    <title>Spotted - Receiver Details</title>
+    <title>Spotted - Account</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    </style>
 </head>
 
 <body>
@@ -70,23 +57,25 @@ $receiverDetails = getReceiverDetails($_SESSION['login'], $receiverId);
     </nav>
 
     <div class="card" style="margin: 2em;">
+        <header class="card-header">
+            <p class="card-header-title">
+                Account
+            </p>
+        </header>
         <div class="card-content">
-            <h1 class="title is-4">Receiver Details</h1>
-            <hr>
             <div class="content">
-                <p><strong>Title:</strong> <?= $receiverDetails['title'] ?></p>
-                <p><strong>Location:</strong> <?= $receiverDetails['location'] ?></p>
-                <p><strong>Device:</strong> <?= $receiverDetails['device'] ?></p>
-                <p><strong>Antenna:</strong> <?= $receiverDetails['antenna'] ?></p>
-
-                <?php
-                    if ($receiverDetails['owner'] === intval($userId)) {
-                        echo '<form action="newreceiver.php" method="get"><input type="submit" value="Edit" /><input type="hidden" id="id" name="id" value="'.$receiverId.'" /></form>';
-                    }
-                ?>
+                ID: <?php echo $_SESSION['login'] . '<br>Username: ' . getUsernameFromUserID($_SESSION['login']); ?><br>
+                Type: <?php echo getTypeFromUserID($_SESSION['login']);?><br>
+                Email: <?php echo getEmailFromUserID($_SESSION['login']);?><br>
+                Last connection: <?php echo getLastSeenFromUserID($_SESSION['login']);?><br>
             </div>
         </div>
+        <footer class="card-footer">
+            <a href="#" class="card-footer-item">Edit account</a>
+            <a href="deleteaccount.php" class="card-footer-item">Delete account</a>
+        </footer>
     </div>
+
 </body>
 
 </html>

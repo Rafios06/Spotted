@@ -3,6 +3,8 @@
 require("checkconnect.php");
 require("configsql.php");
 require("getlists.php");
+require("getuser.php");
+require("getsignal.php");
 require("getreceiver.php");
 
 // Récupérer les informations du signal à afficher (par exemple à partir d'une base de données)
@@ -13,55 +15,6 @@ if ("" == trim($signalId)) {
     // Goto to index.php with Error
     header("Location: index.php");
     exit();
-}
-
-// Get signal details from ID
-function getSignalDetails($userId, $signalId)
-{
-    require("checkconnect.php");
-    require("configsql.php");
-
-    // Open a connection to a MySQL Server
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-    $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password, 'spotteddb');
-
-    if ($stmt = $mysqli->prepare("SELECT Signal_Owner_ID, Signal_Sample_Link, Signal_Description, Signal_AutoReport FROM `signal` WHERE Signal_ID = ?")) {
-        $stmt->bind_param("s", $signalId);
-        $stmt->execute();
-        $stmt->bind_result($Signal_Owner_ID, $Signal_Sample_Link, $Signal_Description, $Signal_AutoReport);
-
-        if ($stmt->fetch()) {
-            if ($Signal_Owner_ID === intval($userId) || $Signal_Owner_ID === -1) {
-                $obj_Signal_AutoReport = json_decode($Signal_AutoReport);
-
-                // Get receiver details
-                $receiverID = $obj_Signal_AutoReport->{'rcv'};
-                $detailsReceiver = getReceiverDetails($userId, $receiverID);
-                $infoReceiver = '<a href="receiver.php?id='.$receiverID.'">'.$detailsReceiver['title'] . ' (' . $detailsReceiver['location'] . ' | ' . $detailsReceiver['device'] . ' | ' . $detailsReceiver['antenna'] . ')'.'</a>';
-                
-                return array(
-                    'frequency' => $obj_Signal_AutoReport->{'fq'},
-                    'time' => $obj_Signal_AutoReport->{'time'},
-                    'receiver' => $infoReceiver,
-                    'sn' => $obj_Signal_AutoReport->{'sn'},
-                    'comment' =>$Signal_Description,
-                    'link' => $Signal_Sample_Link
-                );
-            }
-        }
-    }
-
-    $stmt->close();
-
-    return array(
-        'frequency' => 'N/A',
-        'time' => 'N/A',
-        'receiver' => 'N/A',
-        'sn' => 'N/A',
-        'comment' => 'N/A',
-        'link' => 'N/A'
-    );
 }
 
 $signalDetails = getSignalDetails($_SESSION['login'], $signalId);
@@ -129,11 +82,19 @@ $signalDetails = getSignalDetails($_SESSION['login'], $signalId);
                 <p><strong>Receiver:</strong> <?= $signalDetails['receiver'] ?></p>
                 <p><strong>S/N:</strong> <?= $signalDetails['sn'] ?></p>
                 <p><strong>Link:</strong> <a href="<?= $signalDetails['link'] ?>" target="_blank"><?= $signalDetails['link'] ?></a></p>
+                <p><strong>Owner:</strong> <?= getUsernameFromUserID($signalDetails['owner']) ?></p>
                 <div>
                     <strong>Comment:</strong>
                     <div id="comment-preview" style="margin: 0.2em; margin-bottom: 1em;"><?php echo $signalDetails['comment']; ?></div>
                 </div>
             </div>
+
+            <?php
+            if ($signalDetails['owner'] === intval($_SESSION['login'])) {
+                echo '<form action="newsignal.php" method="get"><input type="submit" value="Edit" /><input type="hidden" id="id" name="id" value="' . $signalId . '" /></form>';
+            }
+            ?>
+
         </div>
     </div>
 

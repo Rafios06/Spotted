@@ -3,6 +3,37 @@
 require("checkconnect.php");
 require("configsql.php");
 require("getlists.php");
+require("getreceiver.php");
+require("getsignal.php");
+
+$userId = $_SESSION['login'];
+$signalId = "";
+
+$editorMode = false;
+
+$sFrequencyUnit = 'MHz';
+
+if (!empty($_GET['id'])) {
+    $signalId = $_GET['id']; // Supposons que l'ID du signal est passé dans l'URL comme paramètre 'id'
+    $signalDetails = getSignalDetails($userId, $signalId);
+
+    if ($signalDetails['owner'] == intval($userId)) {
+        $editorMode = true;
+
+        $sFrequencyArray = explode(" ", $signalDetails['frequency']);
+
+        $sFrequency = $sFrequencyArray[0];
+        $sFrequencyUnit = $sFrequencyArray[1];
+
+        if ($sFrequencyUnit === 'GHz') {
+        } elseif ($sFrequencyUnit === 'MHz') {
+        } elseif ($sFrequencyUnit === 'kHz') {
+        } elseif ($sFrequencyUnit === 'Hz') {
+        } else {
+            $sFrequencyUnit = 'MHz';
+        }
+    }
+}
 
 ?>
 
@@ -11,7 +42,14 @@ require("getlists.php");
 
 <head>
     <meta charset="UTF-8">
-    <title>Spotted - Add signal</title>
+    <?php
+
+    if ($editorMode) {
+        echo '<title>Spotted - Edit signal</title>';
+    } else {
+        echo '<title>Spotted - Add signal</title>';
+    }
+    ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
     <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
@@ -60,20 +98,31 @@ require("getlists.php");
 
     <div class="card" style="margin: 2em;">
         <div class="card-content">
-            <form action="addsignal.php" method="POST">
+            <form action="<?php if ($editorMode) {echo 'editsignal.php';} else {echo 'addsignal.php';} ?>" method="POST">
+                <?php if ($editorMode) {echo '<input type="hidden" id="sID" name="sID" value="'.$signalId.'" />';} ?>
 
                 <label class="label" for="sfrequency">Frequency</label>
                 <div class="field has-addons">
                     <p class="control">
-                        <input class="input" type="text" name="sfrequency" id="sfrequency" required>
+                        <input class="input" type="text" name="sfrequency" id="sfrequency" value="<?php if ($editorMode) {
+                                                                                                        echo intval($sFrequency);
+                                                                                                    } ?>" required>
                     </p>
                     <p class="control">
                         <span class="select">
                             <select name="sfrequencyunit" id="sfrequencyunit">
-                                <option value="GHz">GHz</option>
-                                <option value="MHz" selected>MHz</option>
-                                <option value="kHz">kHz</option>
-                                <option value="Hz">Hz</option>
+                                <option value="GHz" <?php if ($sFrequencyUnit === 'GHz') {
+                                                        echo "selected";
+                                                    } ?>>GHz</option>
+                                <option value="MHz" <?php if ($sFrequencyUnit === 'MHz') {
+                                                        echo "selected";
+                                                    } ?>>MHz</option>
+                                <option value="kHz" <?php if ($sFrequencyUnit === 'kHz') {
+                                                        echo "selected";
+                                                    } ?>>kHz</option>
+                                <option value="Hz" <?php if ($sFrequencyUnit === 'Hz') {
+                                                        echo "selected";
+                                                    } ?>>Hz</option>
                             </select>
                         </span>
                     </p>
@@ -81,7 +130,12 @@ require("getlists.php");
 
                 <div>
                     <label class="label" for="stime">Time (UTC)</label>
-                    <input class="input" type="datetime-local" name="stime" id="stime" value="<?= date('Y-m-d H:i') ?>" style="max-width: 16em;" required>
+                    <?php if ($editorMode) {
+                        echo '<input class="input" type="datetime-local" name="stime" id="stime" value="' . $signalDetails['time'] . '" style="max-width: 16em;" required>';
+                    } else { {
+                            echo '<input class="input" type="datetime-local" name="stime" id="stime" value="' . date('Y-m-d H:i') . '" style="max-width: 16em;" required>';
+                        }
+                    } ?>
                 </div>
 
                 <label class="label" for="sreceiver" style="margin-top: 0.5em;">Receiver</label>
@@ -101,7 +155,9 @@ require("getlists.php");
                 <label class="label" for="snoise">S/N</label>
                 <div class="field has-addons">
                     <p class="control">
-                        <input class="input" type="text" name="snoise" id="snoise" required>
+                        <input class="input" type="text" name="snoise" id="snoise" value="<?php if ($editorMode) {
+                                                                                                echo $signalDetails['sn'];
+                                                                                            } ?>" required>
                     </p>
                     <p class="control">
                         <button type="button" class="button" name="bbad" id="bbad">Bad</button>
@@ -116,22 +172,32 @@ require("getlists.php");
 
                 <div>
                     <label class="label" for="scomment">Comment</label>
-                    <textarea class="input" type="textarea" name="scomment" id="scomment"></textarea>
+                    <textarea class="input" type="textarea" name="scomment" id="scomment"><?php if ($editorMode) {
+                                                                                                echo $signalDetails['comment'];
+                                                                                            } ?></textarea>
                 </div>
 
                 <div>
                     <label class="label" for="slink">Link sample</label>
-                    <input class="input" type="text" name="slink" id="slink">
+                    <input class="input" type="text" name="slink" id="slink" value="<?php if ($editorMode) {
+                                                                                        echo $signalDetails['link'];
+                                                                                    } ?>">
                 </div>
 
                 <div style="margin-top: 0.5em; margin-bottom: 0.5em;">
                     <label class="checkbox">
-                        <input type="checkbox" name="sprivate" id="sprivate">
+                        <input type="checkbox" name="sprivate" id="sprivate" <?php if ($editorMode && $signalDetails['private'] === "1") {
+                                                                                    echo " checked";
+                                                                                } ?>>
                         Private
                     </label>
                 </div>
 
-                <input class="button" type="submit" value="Add">
+                <input style="margin-top: 1em;" class="button" type="submit" <?php if ($editorMode) {
+                                                                                    echo 'value="Change"';
+                                                                                } else {
+                                                                                    echo 'value="Add"';
+                                                                                } ?>>
             </form>
 
         </div>

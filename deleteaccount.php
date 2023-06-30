@@ -2,21 +2,27 @@
 
 require("checkconnect.php");
 require("configsql.php");
-require("getlists.php");
-require("getreceiver.php");
-
-// Récupérer les informations du receiver à afficher (par exemple à partir d'une base de données)
-$receiverId = $_GET['id']; // Supposons que l'ID du receiver est passé dans l'URL comme paramètre 'id'
-
-// Check if not empty
-if ("" == trim($receiverId)) {
-    // Goto to index.php with Error
-    header("Location: index.php");
-    exit();
-}
+require("getuser.php");
 
 $userId = $_SESSION['login'];
-$receiverDetails = getReceiverDetails($_SESSION['login'], $receiverId);
+
+if (!empty($_POST['bye'])) {
+    // delete account
+
+    // Open a connection to a MySQL Server
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+    $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password, 'spotteddb');
+    if ($stmt = $mysqli->prepare("DELETE FROM user WHERE User_ID = '" . $userId . "'")) {
+        $stmt->execute();
+    }
+
+    $stmt->close();
+
+    // Goto to logout.php
+    header("Location: logout.php");
+    die();
+}
 
 ?>
 
@@ -25,8 +31,9 @@ $receiverDetails = getReceiverDetails($_SESSION['login'], $receiverId);
 
 <head>
     <meta charset="UTF-8">
-    <title>Spotted - Receiver Details</title>
+    <title>Spotted - Delete account</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    </style>
 </head>
 
 <body>
@@ -70,23 +77,26 @@ $receiverDetails = getReceiverDetails($_SESSION['login'], $receiverId);
     </nav>
 
     <div class="card" style="margin: 2em;">
+        <header class="card-header">
+            <p class="card-header-title">
+                Delete your account ?
+            </p>
+        </header>
         <div class="card-content">
-            <h1 class="title is-4">Receiver Details</h1>
-            <hr>
             <div class="content">
-                <p><strong>Title:</strong> <?= $receiverDetails['title'] ?></p>
-                <p><strong>Location:</strong> <?= $receiverDetails['location'] ?></p>
-                <p><strong>Device:</strong> <?= $receiverDetails['device'] ?></p>
-                <p><strong>Antenna:</strong> <?= $receiverDetails['antenna'] ?></p>
-
-                <?php
-                    if ($receiverDetails['owner'] === intval($userId)) {
-                        echo '<form action="newreceiver.php" method="get"><input type="submit" value="Edit" /><input type="hidden" id="id" name="id" value="'.$receiverId.'" /></form>';
-                    }
-                ?>
+                To delete your account (<?php echo getUsernameFromUserID($_SESSION['login']) . "/" . getEmailFromUserID($_SESSION['login']) ?>), please confirm your decision.<br>
+                Please note that once your account has been deleted, all your information associated with the account will be permanently deleted. This action is irreversible.<br>
+                To confirm the deletion of your account, please click on "Confirm".<br>
             </div>
         </div>
+        <footer class="card-footer columns is-centered">
+            <form action="deleteaccount.php" method="POST">
+                <input type="hidden" id="bye" name="bye" value="42" />
+                <button class="button">Confirm</a>
+            </form>
+        </footer>
     </div>
+
 </body>
 
 </html>
