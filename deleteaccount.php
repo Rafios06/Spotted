@@ -92,7 +92,7 @@ if (!empty($_POST['bye'])) {
         <footer class="card-footer columns is-centered">
             <form action="deleteaccount.php" method="POST">
                 <input type="hidden" id="bye" name="bye" value="42" />
-                <button class="button">Confirm</a>
+                <button class="button" style="margin: 0.5em;">Confirm</a>
             </form>
         </footer>
     </div>

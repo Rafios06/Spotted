@@ -18,6 +18,32 @@ if ("" == trim($receiverId)) {
 $userId = $_SESSION['login'];
 $receiverDetails = getReceiverDetails($_SESSION['login'], $receiverId);
 
+// Extraire les coordonnées de la location
+$location = $receiverDetails['location'];
+$coordinates = [];
+
+// url encode the address
+$address = urlencode($location);
+
+$url = "https://nominatim.openstreetmap.org/?format=json&addressdetails=1&q={$address}&format=json&limit=1";
+
+$options  = array('http' => array('user_agent' => 'Spotted Bot (tortillum.com)'));
+$context  = stream_context_create($options);
+$resp_json = file_get_contents($url, false, $context);
+
+// decode the json
+$resp = json_decode($resp_json, true);
+
+if (!empty($resp)) {
+    $latitude = $resp[0]['lat'];
+    $longitude = $resp[0]['lon'];
+} else {
+    // Gestion de l'adresse non trouvée
+    // Vous pouvez afficher un message d'erreur ou utiliser des valeurs par défaut pour les coordonnées
+    $latitude = 0;
+    $longitude = 0;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +53,9 @@ $receiverDetails = getReceiverDetails($_SESSION['login'], $receiverId);
     <meta charset="UTF-8">
     <title>Spotted - Receiver Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 
 <body>
@@ -80,13 +109,48 @@ $receiverDetails = getReceiverDetails($_SESSION['login'], $receiverId);
                 <p><strong>Antenna:</strong> <?= $receiverDetails['antenna'] ?></p>
 
                 <?php
-                    if ($receiverDetails['owner'] === intval($userId)) {
-                        echo '<form action="newreceiver.php" method="get"><input type="submit" value="Edit" /><input type="hidden" id="id" name="id" value="'.$receiverId.'" /></form>';
-                    }
+                if ($receiverDetails['location'] != "N/A") {
+                    echo '<div id="map" style="height: 400px;"></div>';
+                }
+
+                if ($receiverDetails['owner'] === intval($userId)) {
+                    echo '<footer class="card-footer"><form action="newreceiver.php" method="get" class="card-footer-item"><input class="button" type="submit" value="Edit" /><input type="hidden" id="id" name="id" value="' . $receiverId . '" /></form>';
+                    echo '<form action="delreceiver.php" method="get" class="card-footer-item"><input class="button is-danger is-light" type="submit" value="Delete" /><input type="hidden" id="id" name="id" value="' . $receiverId . '" /></form></footer>';
+                }
                 ?>
             </div>
         </div>
     </div>
+
+    <script>
+        // Définir l'icône personnalisée
+        var customIcon = L.icon({
+            iconUrl: 'res/svg/iconmonstr-radio-tower-5.svg', // Spécifiez le chemin vers votre image d'icône
+            iconSize: [28, 28], // Spécifiez la taille de l'icône
+            iconAnchor: [19, 28], // Spécifiez l'ancre de l'icône (le point de l'icône qui sera positionné sur les coordonnées)
+        });
+
+        // Créez le marqueur avec l'icône personnalisée
+        var latitude = <?= $latitude ?>;
+        var longitude = <?= $longitude ?>;
+
+        // Vérification des coordonnées
+        if (isNaN(latitude) || isNaN(longitude)) {
+            console.error('Invalid coordinates:', latitude, longitude);
+        } else {
+            var map = L.map('map').setView([latitude, longitude], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            var marker = L.marker([latitude, longitude], {
+                icon: customIcon
+            }).addTo(map);
+        }
+    </script>
+
 </body>
 
 </html>

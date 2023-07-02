@@ -11,10 +11,21 @@ require("getuser.php");
 
 <head>
     <meta charset="UTF-8">
-    <title>Spotted - Account</title>
+    <title>Spotted - Edit account</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     </style>
 </head>
+
+<script>
+    function check_pass() {
+        if (document.getElementById('upassword').value ==
+            document.getElementById('upasswordb').value) {
+            document.getElementById('submit').disabled = false;
+        } else {
+            document.getElementById('submit').disabled = true;
+        }
+    }
+</script>
 
 <body>
 
@@ -59,24 +70,49 @@ require("getuser.php");
     <div class="card" style="margin: 2em;">
         <header class="card-header">
             <p class="card-header-title">
-                Account
+                Edit account
             </p>
         </header>
         <div class="card-content">
             <div class="content">
-                Username: <?php echo getUsernameFromUserID($_SESSION['login']); ?><br>
-                Email: <?php echo getEmailFromUserID($_SESSION['login']); ?><br>
-                Last connection: <?php echo getLastSeenFromUserID($_SESSION['login']); ?><br><br>
+                <form action="editprofil.php" method="POST">
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control">
+                            <input class="input" type="text" name="" id="" placeholder="Username" value="<?php echo getUsernameFromUserID($_SESSION['login']); ?>" disabled required>
+                        </div>
+                    </div>
 
-                <div class="content is-small">
-                    ID: <?php echo $_SESSION['login'] . "/" . getTypeFromUserID($_SESSION['login']); ?><br>
-                </div>
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                            <input class="input" type="text" name="uemail" id="uemail" placeholder="Email" value="<?php echo getEmailFromUserID($_SESSION['login']); ?>" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">New password</label>
+                        <div class="control">
+                            <input class="input" type="password" name="upassword" id="upassword" placeholder="New password" onchange='check_pass();' required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Confirm password</label>
+                        <div class="control">
+                            <input class="input" type="password" name="upasswordb" id="upasswordb" placeholder="Confirm password" onchange='check_pass();' required>
+                        </div>
+                    </div>
             </div>
         </div>
         <footer class="card-footer">
-            <a href="editaccount.php" class="card-footer-item">Edit account</a>
-            <a href="deleteaccount.php" class="card-footer-item">Delete account</a>
+            <div class="control card-footer-item">
+                <button class="button" type="submit" name="submit" id="submit">
+                    Edit
+                </button>
+            </div>
         </footer>
+        </form>
     </div>
 
 </body>

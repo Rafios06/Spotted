@@ -28,7 +28,7 @@ if (!empty($_GET['id'])) {
     <meta charset="UTF-8">
     <?php
 
-if ($editorMode) {
+    if ($editorMode) {
         echo '<title>Spotted - Edit receiver</title>';
     } else {
         echo '<title>Spotted - Add receiver</title>';
@@ -80,35 +80,72 @@ if ($editorMode) {
     <div class="card" style="margin: 2em;">
         <div class="card-content">
 
-            <form action="<?php if ($editorMode) {echo 'editreceiver.php';} else {echo 'addreceiver.php';} ?>" method="POST">
-                <?php if ($editorMode) {echo '<input type="hidden" id="rID" name="rID" value="'.$receiverId.'" />';} ?>
-                
+            <form action="<?php if ($editorMode) {
+                                echo 'editreceiver.php';
+                            } else {
+                                echo 'addreceiver.php';
+                            } ?>" method="POST">
+                <?php if ($editorMode) {
+                    echo '<input type="hidden" id="rID" name="rID" value="' . $receiverId . '" />';
+                } ?>
+
                 <div>
-                    <label class="label" for="rtitle">Title</label>
-                    <input class="input" type="text" name="rtitle" id="rtitle" value="<?php if ($editorMode) {echo $receiverDetails['title'];} ?>" required>
+                    <label class="label" style="margin-top: 0.5em;" for="rtitle">Title</label>
+                    <input class="input" type="text" name="rtitle" id="rtitle" value="<?php if ($editorMode) {
+                                                                                            echo $receiverDetails['title'];
+                                                                                        } ?>" required>
                 </div>
 
                 <div>
-                    <label class="label" for="rlocation">Location</label>
-                    <input class="input" type="text" name="rlocation" id="rlocation" value="<?php if ($editorMode) {echo $receiverDetails['location'];} ?>" required>
+                    <label class="label" style="margin-top: 0.5em;" for="rlocation">Location</label>
+                    <div class="field has-addons">
+                        <p class="control">
+                            <input class="input" type="text" name="rlocation" id="rlocation" value="<?php if ($editorMode) {
+                                                                                                        echo $receiverDetails['location'];
+                                                                                                    } ?>" required>
+                        </p>
+                        <p class="control">
+                            <button type="button" class="button" name="checkmap" id="checkmap">Check in map</button>
+                        </p>
+                    </div>
                 </div>
 
                 <div>
-                    <label class="label" for="rdevice">Device</label>
-                    <input class="input" type="text" name="rdevice" id="rdevice" value="<?php if ($editorMode) {echo $receiverDetails['device'];} ?>" required>
+                    <label class="label" style="margin-top: 0.5em;" for="rdevice">Device</label>
+                    <input class="input" type="text" name="rdevice" id="rdevice" value="<?php if ($editorMode) {
+                                                                                            echo $receiverDetails['device'];
+                                                                                        } ?>" required>
                 </div>
 
                 <div>
-                    <label class="label" for="rantenna">Antenna</label>
-                    <input class="input" type="text" name="rantenna" id="rantenna" value="<?php if ($editorMode) {echo $receiverDetails['antenna'];} ?>" required>
+                    <label class="label" style="margin-top: 0.5em;" for="rantenna">Antenna</label>
+                    <input class="input" type="text" name="rantenna" id="rantenna" value="<?php if ($editorMode) {
+                                                                                                echo $receiverDetails['antenna'];
+                                                                                            } ?>" required>
                 </div>
 
-                <input style="margin-top: 1em;" class="button" type="submit" <?php if ($editorMode) {echo 'value="Change"';} else {echo 'value="Add"';} ?> >
+                <input style="margin-top: 1em;" class="button" type="submit" <?php if ($editorMode) {
+                                                                                    echo 'value="Change"';
+                                                                                } else {
+                                                                                    echo 'value="Add"';
+                                                                                } ?>>
             </form>
 
         </div>
     </div>
 
 </body>
+
+<script>
+    document.getElementById('checkmap').onclick = function() {
+        const locationreceiver = document.getElementById("rlocation").value;
+        const url = 'https://nominatim.openstreetmap.org/?q=' + locationreceiver + '&limit=1';
+        const encoded = encodeURI(url);
+        window.open(
+            encoded,
+            '_blank'
+        );
+    };
+</script>
 
 </html>
