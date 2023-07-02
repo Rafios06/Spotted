@@ -19,7 +19,7 @@ function getSignalDetails($userId, $signalId)
         if ($stmt->fetch()) {
             $obj_Signal_AutoReport = json_decode($Signal_AutoReport);
 
-            if ($Signal_Owner_ID === intval($userId) || $obj_Signal_AutoReport->{'prv'} === "0") {
+            if ($Signal_Owner_ID === intval($userId) || $obj_Signal_AutoReport->{'prv'} === "0" || getTypeFromUserID($userId) === 1) {
 
                 // Get receiver details
                 $receiverID = $obj_Signal_AutoReport->{'rcv'};

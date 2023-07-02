@@ -2,6 +2,7 @@
 
 require("checkconnect.php");
 require("configsql.php");
+require("getuser.php");
 
 // Open a connection to a MySQL Server
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -20,10 +21,17 @@ if ("" == trim($rID)) {
     exit();
 }
 
-// Prepare & execute request
-$stmt = $mysqli->prepare("DELETE FROM `receiver` WHERE Receiver_ID=? AND Receiver_Owner_ID=?");
-$stmt->bind_param("ii", $rID, $rowner);
-$stmt->execute();
+if (getTypeFromUserID($_SESSION['login']) === 1) {
+    // Prepare & execute request
+    $stmt = $mysqli->prepare("DELETE FROM `receiver` WHERE Receiver_ID=?");
+    $stmt->bind_param("i", $rID);
+    $stmt->execute();
+} else {
+    // Prepare & execute request
+    $stmt = $mysqli->prepare("DELETE FROM `receiver` WHERE Receiver_ID=? AND Receiver_Owner_ID=?");
+    $stmt->bind_param("ii", $rID, $rowner);
+    $stmt->execute();
+}
 
 // Go to newreceiver.php with Success
 header("Location: newreceiver.php?e=0");

@@ -5,6 +5,7 @@ require("configsql.php");
 require("getlists.php");
 require("getreceiver.php");
 require("getsignal.php");
+require("getuser.php");
 
 $userId = $_SESSION['login'];
 $signalId = "";
@@ -17,7 +18,7 @@ if (!empty($_GET['id'])) {
     $signalId = $_GET['id']; // Supposons que l'ID du signal est passé dans l'URL comme paramètre 'id'
     $signalDetails = getSignalDetails($userId, $signalId);
 
-    if ($signalDetails['owner'] == intval($userId)) {
+    if ($signalDetails['owner'] == intval($userId) || getTypeFromUserID($userId) === 1) {
         $editorMode = true;
 
         $sFrequencyArray = explode(" ", $signalDetails['frequency']);

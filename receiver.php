@@ -4,6 +4,7 @@ require("checkconnect.php");
 require("configsql.php");
 require("getlists.php");
 require("getreceiver.php");
+require("getuser.php");
 
 // Récupérer les informations du receiver à afficher (par exemple à partir d'une base de données)
 $receiverId = $_GET['id']; // Supposons que l'ID du receiver est passé dans l'URL comme paramètre 'id'
@@ -113,7 +114,7 @@ if (!empty($resp)) {
                     echo '<div id="map" style="height: 400px;"></div>';
                 }
 
-                if ($receiverDetails['owner'] === intval($userId)) {
+                if ($receiverDetails['owner'] === intval($userId) || getTypeFromUserID($_SESSION['login']) === 1) {
                     echo '<footer class="card-footer"><form action="newreceiver.php" method="get" class="card-footer-item"><input class="button" type="submit" value="Edit" /><input type="hidden" id="id" name="id" value="' . $receiverId . '" /></form>';
                     echo '<form action="delreceiver.php" method="get" class="card-footer-item"><input class="button is-danger is-light" type="submit" value="Delete" /><input type="hidden" id="id" name="id" value="' . $receiverId . '" /></form></footer>';
                 }

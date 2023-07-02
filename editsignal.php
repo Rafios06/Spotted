@@ -2,6 +2,7 @@
 
 require("checkconnect.php");
 require("configsql.php");
+require("getuser.php");
 
 // Open a connection to a MySQL Server
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -39,11 +40,17 @@ $fq = $sfrequency . " " . $sfrequencyunit;
 $arr_autoreport = array('fq' => $fq, 'time' => $stime, 'rcv' => $sreceiver, 'sn' => $snoise, 'prv' => $sprivate);
 $arr_Signal_AutoReport = json_encode($arr_autoreport);
 
-// Prepare & execute request
-$stmt = $mysqli->prepare("UPDATE `signal` SET Signal_Owner_ID=?, Signal_Sample_Link=?, Signal_Description=?, Signal_AutoReport=? WHERE Signal_ID=? AND Signal_Owner_ID=?");
-$stmt->bind_param("isssii", $suser, $slink, $scomment, $arr_Signal_AutoReport, $sID, $suser);
-$stmt->execute();
-
+if (getTypeFromUserID($_SESSION['login']) === 1) {
+    // Prepare & execute request
+    $stmt = $mysqli->prepare("UPDATE `signal` SET Signal_Owner_ID=?, Signal_Sample_Link=?, Signal_Description=?, Signal_AutoReport=? WHERE Signal_ID=?");
+    $stmt->bind_param("isssi", $suser, $slink, $scomment, $arr_Signal_AutoReport, $sID);
+    $stmt->execute();
+} else {
+    // Prepare & execute request
+    $stmt = $mysqli->prepare("UPDATE `signal` SET Signal_Owner_ID=?, Signal_Sample_Link=?, Signal_Description=?, Signal_AutoReport=? WHERE Signal_ID=? AND Signal_Owner_ID=?");
+    $stmt->bind_param("isssii", $suser, $slink, $scomment, $arr_Signal_AutoReport, $sID, $suser);
+    $stmt->execute();
+}
 
 // Goto to newsignal.php with Success
 header("Location: newsignal.php?e=0");

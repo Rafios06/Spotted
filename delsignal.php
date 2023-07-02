@@ -2,6 +2,7 @@
 
 require("checkconnect.php");
 require("configsql.php");
+require("getuser.php");
 
 // Open a connection to a MySQL Server
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -20,10 +21,17 @@ if ("" == trim($sID)) {
     exit();
 }
 
-// Prepare & execute request
-$stmt = $mysqli->prepare("DELETE FROM `signal` WHERE Signal_ID=? AND Signal_Owner_ID=?");
-$stmt->bind_param("ii", $sID, $sowner);
-$stmt->execute();
+if (getTypeFromUserID($_SESSION['login']) === 1) {
+    // Prepare & execute request
+    $stmt = $mysqli->prepare("DELETE FROM `signal` WHERE Signal_ID=?");
+    $stmt->bind_param("i", $sID);
+    $stmt->execute();
+} else {
+    // Prepare & execute request
+    $stmt = $mysqli->prepare("DELETE FROM `signal` WHERE Signal_ID=? AND Signal_Owner_ID=?");
+    $stmt->bind_param("ii", $sID, $sowner);
+    $stmt->execute();
+}
 
 // Go to newsignal.php with Success
 header("Location: newsignal.php?e=0");

@@ -4,6 +4,7 @@ require("checkconnect.php");
 require("configsql.php");
 require("getlists.php");
 require("getreceiver.php");
+require("getuser.php");
 
 $userId = $_SESSION['login'];
 $receiverId = "";
@@ -14,7 +15,7 @@ if (!empty($_GET['id'])) {
     $receiverId = $_GET['id']; // Supposons que l'ID du receiver est passé dans l'URL comme paramètre 'id'
     $receiverDetails = getReceiverDetails($userId, $receiverId);
 
-    if ($receiverDetails['owner'] == intval($userId)) {
+    if ($receiverDetails['owner'] == intval($userId) || getTypeFromUserID($userId) === 1) {
         $editorMode = true;
     }
 }

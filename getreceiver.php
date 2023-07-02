@@ -17,7 +17,7 @@ function getReceiverDetails($userId, $receiverId)
         $stmt->bind_result($Receiver_ID, $Receiver_Owner_ID, $Receiver_Title, $Receiver_Location, $Receiver_Device, $Receiver_Antenna);
 
         if ($stmt->fetch()) {
-            if ($Receiver_Owner_ID === intval($userId) || $Receiver_Owner_ID === -1) {
+            if ($Receiver_Owner_ID === intval($userId) || $Receiver_Owner_ID === -1 || getTypeFromUserID($userId) === 1) {
 
                 return array(
                     'owner' => $Receiver_Owner_ID,

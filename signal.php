@@ -90,7 +90,7 @@ $signalDetails = getSignalDetails($_SESSION['login'], $signalId);
             </div>
 
             <?php
-            if ($signalDetails['owner'] === intval($_SESSION['login'])) {
+            if ($signalDetails['owner'] === intval($_SESSION['login']) || getTypeFromUserID($_SESSION['login']) === 1) {
                 echo '<footer class="card-footer"><form action="newsignal.php" method="get" class="card-footer-item"><input class="button" type="submit" value="Edit" /><input type="hidden" id="id" name="id" value="' . $signalId . '" /></form>';
                 echo '<form action="delsignal.php" method="get" class="card-footer-item"><input class="button is-danger is-light" type="submit" value="Delete" /><input type="hidden" id="id" name="id" value="' . $signalId . '" /></form></footer>';
 
