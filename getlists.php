@@ -14,18 +14,27 @@ function generateSelectReceivers()
         $stmt->execute();
         $stmt->store_result();
 
-        do {
-            $stmt->bind_result($id_receiver, $id_owner, $title_receiver, $location_receiver, $device_receiver, $antenna_receiver);
-            if ($id_receiver !== null) {
-                echo '<option value="'.$id_receiver.'">'.$title_receiver.'</option>';
-            }
-        } while ($row = $stmt->fetch());
+        if ($stmt->num_rows > 0) {
+            // If there are results, display them
+            do {
+                $stmt->bind_result($id_receiver, $id_owner, $title_receiver, $location_receiver, $device_receiver, $antenna_receiver);
+                if ($id_receiver !== null) {
+                    echo '<option value="'.$id_receiver.'">'.$title_receiver.'</option>';
+                }
+            } while ($row = $stmt->fetch());
+        } else {
+            // If there are no results, display "Create new receiver"
+            echo '<option value="----" selected>Create new receiver</option>';
+        }
+
+        $stmt->close();
     } else {
+        // If there's an error with the query, display "Create new receiver"
         echo '<option value="----" selected>Create new receiver</option>';
     }
 
-    $stmt->close();
     return '';
 }
+
 
 ?>
