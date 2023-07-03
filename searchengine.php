@@ -27,12 +27,12 @@ function getLastSignalsAddeds($userID, $limit)
                     echo '<div class="card">
                     <header class="card-header">
                         <p class="card-header-title">
-                            ' . $infoSignal['title'] . '<span class="tag" style="margin-left: 1em;">'.$infoSignal['frequency'].'</span>' . '<span class="tag" style="margin-left: 1em;">'.$infoSignal['time'].'</span>' . '<span class="tag" style="margin-left: 1em;">'.getUsernameFromUserID($infoSignal['owner']).'</span> 
+                        <a href="signal.php?id='.$Signal_ID.'">' . $infoSignal['title'] . '</a><span class="tag" style="margin-left: 1em;">'.$infoSignal['frequency'].'</span>' . '<span class="tag" style="margin-left: 1em;">'.$infoSignal['time'].'</span>' . '<span class="tag" style="margin-left: 1em;">'.getUsernameFromUserID($infoSignal['owner']).'</span> 
                         </p>
                     </header>
                     <div class="card-content">
                         <div class="content">
-                            '.$infoSignal['comment'].'
+                            '.$infoSignal['lcomment'].'
                         </div>
                     </div>
                 </div>

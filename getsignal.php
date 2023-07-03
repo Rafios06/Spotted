@@ -29,9 +29,15 @@ function getSignalDetails($userId, $signalId)
                 $comment = base64_decode($Signal_Description);
 
                 // Generate title from comment
-                $words = explode(" ", $comment);
+                $line = preg_split('#\r?\n#', ltrim($comment), 2)[0];
+                $words = explode(" ", $line);
                 $partsTitle = array_slice($words, 0, 32);
                 $title = preg_replace("/[^a-zA-Z0-9À-ÿ\s]/u", "", implode(" ", $partsTitle));
+
+                // Generate little comment
+                $wordsComment = explode(" ", $comment);
+                $partsComment = array_slice($wordsComment, 0, 32);
+                $littleComment = preg_replace("/[^a-zA-Z0-9À-ÿ\s]/u", "", implode(" ", $partsComment));
 
                 return array(
                     'owner' => $Signal_Owner_ID,
@@ -42,6 +48,7 @@ function getSignalDetails($userId, $signalId)
                     'sn' => $obj_Signal_AutoReport->{'sn'},
                     'title' => $title,
                     'comment' => $comment,
+                    'lcomment' => $littleComment,
                     'link' => $Signal_Sample_Link
                 );
             }
