@@ -26,6 +26,13 @@ function getSignalDetails($userId, $signalId)
                 $detailsReceiver = getReceiverDetails($userId, $receiverID);
                 $infoReceiver = '<a href="receiver.php?id=' . $receiverID . '">' . $detailsReceiver['title'] . ' (' . $detailsReceiver['location'] . ' | ' . $detailsReceiver['device'] . ' | ' . $detailsReceiver['antenna'] . ')' . '</a>';
 
+                $comment = base64_decode($Signal_Description);
+
+                // Generate title from comment
+                $words = explode(" ", $comment);
+                $partsTitle = array_slice($words, 0, 32);
+                $title = preg_replace("/[^a-zA-Z0-9À-ÿ\s]/u", "", implode(" ", $partsTitle));
+
                 return array(
                     'owner' => $Signal_Owner_ID,
                     'private' => $obj_Signal_AutoReport->{'prv'},
@@ -33,7 +40,8 @@ function getSignalDetails($userId, $signalId)
                     'time' => $obj_Signal_AutoReport->{'time'},
                     'receiver' => $infoReceiver,
                     'sn' => $obj_Signal_AutoReport->{'sn'},
-                    'comment' => base64_decode($Signal_Description),
+                    'title' => $title,
+                    'comment' => $comment,
                     'link' => $Signal_Sample_Link
                 );
             }
@@ -49,6 +57,7 @@ function getSignalDetails($userId, $signalId)
         'time' => 'N/A',
         'receiver' => 'N/A',
         'sn' => 'N/A',
+        'title' => 'N/A',
         'comment' => 'N/A',
         'link' => 'N/A'
     );

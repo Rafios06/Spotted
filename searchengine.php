@@ -4,6 +4,9 @@ function getLastSignalsAddeds($userID, $limit)
 {
     require("checkconnect.php");
     require("configsql.php");
+    require("getreceiver.php");
+    require("getsignal.php");
+    require("getuser.php");
 
     // Open a connection to a MySQL Server
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -19,15 +22,17 @@ function getLastSignalsAddeds($userID, $limit)
             do {
                 $stmt->bind_result($Signal_ID);
                 if ($Signal_ID !== null) {
+                    $infoSignal = getSignalDetails($userID, $Signal_ID);
+
                     echo '<div class="card">
                     <header class="card-header">
                         <p class="card-header-title">
-                            ' . $Signal_ID . '
+                            ' . $infoSignal['title'] . '<span class="tag" style="margin-left: 1em;">'.$infoSignal['frequency'].'</span>' . '<span class="tag" style="margin-left: 1em;">'.$infoSignal['time'].'</span>' . '<span class="tag" style="margin-left: 1em;">'.getUsernameFromUserID($infoSignal['owner']).'</span> 
                         </p>
                     </header>
                     <div class="card-content">
                         <div class="content">
-                            Lorem ipsum leo risus, porta ac consectetur ac, vestibulum at eros. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras mattis consectetur purus sit amet fermentum.
+                            '.$infoSignal['comment'].'
                         </div>
                     </div>
                 </div>
@@ -35,14 +40,12 @@ function getLastSignalsAddeds($userID, $limit)
                 }
             } while ($row = $stmt->fetch());
         } else {
-            // If there are no results, display "Create new receiver"
-            echo "N/A";
+            echo "";
         }
 
         $stmt->close();
     } else {
-        // If there's an error with the query, display "Create new receiver"
-        echo 'N/A';
+        echo '';
     }
 
     return '';
