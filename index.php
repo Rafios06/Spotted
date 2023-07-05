@@ -86,7 +86,7 @@ require("searchengine.php");
                 <div class="card-content">
                     <div class="content">
 
-                        <?php getLastSignalsAddeds($_SESSION['login'],0); ?>
+                        <?php getLastSignalsAddeds($_SESSION['login'],10); ?>
 
                         <div class="card">
                             <header class="card-header">

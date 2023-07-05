@@ -13,18 +13,18 @@ function getLastSignalsAddeds($userID, $limit)
 
     $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password, 'spotteddb');
 
-    if ($stmt = $mysqli->prepare("SELECT Signal_ID FROM `signal` WHERE Signal_Owner_ID = '-1' OR Signal_Owner_ID = '" . $userID . "'")) {
+    if ($stmt = $mysqli->prepare("SELECT Signal_ID FROM `signal` WHERE Signal_Owner_ID = ? ORDER BY Signal_ID DESC LIMIT ?")) {
+        $stmt->bind_param("ii", $userID, $limit);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
             // If there are results, display them
-            do {
-                $stmt->bind_result($Signal_ID);
-                if ($Signal_ID !== null) {
-                    $infoSignal = getSignalDetails($userID, $Signal_ID);
+            $stmt->bind_result($Signal_ID);
+            while ($stmt->fetch()) {
+                $infoSignal = getSignalDetails($userID, $Signal_ID);
 
-                    echo '<div class="card">
+                echo '<div class="card">
                     <header class="card-header">
                         <p class="card-header-title">
                         <a href="signal.php?id='.$Signal_ID.'">' . $infoSignal['title'] . '</a><span class="tag" style="margin-left: 1em;">'.$infoSignal['frequency'].'</span>' . '<span class="tag" style="margin-left: 1em;">'.$infoSignal['time'].'</span>' . '<span class="tag" style="margin-left: 1em;">'.getUsernameFromUserID($infoSignal['owner']).'</span> 
@@ -37,8 +37,7 @@ function getLastSignalsAddeds($userID, $limit)
                     </div>
                 </div>
                 <br>';
-                }
-            } while ($row = $stmt->fetch());
+            }
         } else {
             echo "";
         }
@@ -50,6 +49,5 @@ function getLastSignalsAddeds($userID, $limit)
 
     return '';
 }
-
 
 ?>
