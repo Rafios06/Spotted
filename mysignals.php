@@ -19,7 +19,7 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Spotted.</title>
+    <title>Spotted - My signals</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/octicons@4.4.0/build/font/octicons.css">
@@ -55,7 +55,7 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
                             <li><a href="index.php">Home</a></li>
                         </ul>
                         <ul class="menu-list">
-                            <li><a href="mysignals.php">My signals</a></li>
+                            <li><a href="signal.php">My signals</a></li>
                         </ul>
                         <ul class="menu-list">
                             <li><a href="receiver.php">Receiver</a></li>
@@ -87,13 +87,13 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title">
-                        Last signals
+                        My signals
                     </p>
                 </header>
                 <div class="card-content">
                     <div class="content">
 
-                        <?php getPublicSignal($_SESSION['login'],10,$currentPage); ?>
+                        <?php getSignalByUser($_SESSION['login'],10,$currentPage); ?>
 
                     </div>
                 </div>

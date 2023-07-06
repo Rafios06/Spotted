@@ -26,7 +26,7 @@ function getUsernameFromUserID($userID)
     }
 
     $stmt->close();
-    return '';
+    return 'N/A';
 }
 
 // Get type from ID
