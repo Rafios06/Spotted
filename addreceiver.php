@@ -29,5 +29,5 @@ $stmt->bind_param("issss", $rowner, $rtitle, $rlocation, $rdevice, $rantenna);
 $stmt->execute();
 
 // Goto to newreceiver.php with Success
-header("Location: newreceiver.php?e=0");
+header("Location: myreceivers.php?e=0");
 die();

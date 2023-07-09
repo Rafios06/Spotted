@@ -1,5 +1,4 @@
 <?php
-
 require("checkconnect.php");
 require("configsql.php");
 require("getstats.php");
@@ -11,7 +10,6 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 if ("" == trim($currentPage) || $currentPage <= 0) {
     $currentPage = 1;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +19,8 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
     <meta charset="UTF-8">
     <title>Spotted.</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <link rel="stylesheet" href="https://unpkg.com/octicons@4.4.0/build/font/octicons.css">
     <link rel="stylesheet" href="https://unpkg.com/github-activity-feed@latest/dist/github-activity.min.css">
@@ -29,6 +29,10 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
     <script type="text/javascript" src="https://unpkg.com/github-activity-feed@latest/dist/github-activity.min.js"></script>
 
     <style>
+        .navbar-item .field:not(.is-expanded):hover {
+            width: 18rem;
+        }
+
         .gha-footer {
             display: none;
         }
@@ -37,47 +41,61 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
             width: calc(100%);
         }
     </style>
-
 </head>
 
 <body>
 
-    <nav class="navbar is-light has-shadow">
+    <nav class="navbar is-light has-shadow" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link is-arrowless">
-                    <img src="res/svg/icon.svg" width="28" height="28" style="margin: 0.5em;">
+            <a class="navbar-item" href="index.php">
+                <img src="res/svg/icon.svg" width="28" height="28" alt="Spotted">
+            </a>
+
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarMenu" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="mysignals.php">
+                    My signals
                 </a>
-
-                <div class="navbar-dropdown">
-                    <aside class="menu" style="margin: 0.5em;">
-                        <ul class="menu-list">
-                            <li><a href="index.php">Home</a></li>
-                        </ul>
-                        <ul class="menu-list">
-                            <li><a href="mysignals.php">My signals</a></li>
-                        </ul>
-                        <ul class="menu-list">
-                            <li><a href="receiver.php">Receiver</a></li>
-                        </ul>
-                        <ul class="menu-list">
-                            <li><a href="account.php">Account</a></li>
-                        </ul>
-                        <ul class="menu-list">
-                            <li><a href="logout.php">Log out</a></li>
-                        </ul>
-                    </aside>
-                </div>
-
+                <a class="navbar-item" href="receiver.php">
+                    My receivers
+                </a>
+                <a class="navbar-item" href="account.php">
+                    Account
+                </a>
             </div>
 
-            <div id="navMenuColorlight-example" class="navbar-menu">
-                <div class="navbar-start">
-                    <div class="navbar-item">
-                        <input class="input is-rounded" type="text" style="margin: 0.5em;" placeholder="Search">
-                    </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <form action="search.php" method="GET">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input class="input is-rounded" type="text" placeholder="Search" id="s" name="s">
+                            </div>
+                            <div class="control">
+                                <button class="button is-info">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="navbar-item">
+                    <a class="button is-danger" href="logout.php">
+                        <span class="icon">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </span>
+                        <span>Log out</span>
+                    </a>
                 </div>
             </div>
+        </div>
     </nav>
 
     <br>
@@ -87,14 +105,13 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title">
-                        Last signals
+                        <span>Last signals</span>
+                        <a class="button is-primary navbar-end" href="addsignal.php">Add</a>
                     </p>
                 </header>
                 <div class="card-content">
                     <div class="content">
-
-                        <?php getPublicSignal($_SESSION['login'],10,$currentPage); ?>
-
+                        <?php getPublicSignal($_SESSION['login'], 16, $currentPage); ?>
                     </div>
                 </div>
             </div>
@@ -110,10 +127,33 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
                 </header>
                 <div class="card-content">
                     <div class="content">
-                        Signals ajoutées (Vous): <br><?php echo getTotalUserSignal($_SESSION['login']); ?><br>
-                        Recepteurs ajoutées (Vous) : <br><?php echo getTotalUserReceiver($_SESSION['login']); ?><br>
-                        Signals ajoutées (Total): <br><?php echo getTotalSignal(); ?><br>
-                        Recepteurs ajoutées (Total) : <br><?php echo getTotalReceiver(); ?><br>
+                        <div class="columns is-multiline is-mobile">
+                            <div class="column is-half-tablet is-full-mobile">
+                                <div class="box has-text-centered">
+                                    <p class="heading">Signals added (You)</p>
+                                    <p class="title is-size-4"><?php echo getTotalUserSignal($_SESSION['login']); ?></p>
+                                </div>
+                            </div>
+                            <div class="column is-half-tablet is-full-mobile">
+                                <div class="box has-text-centered">
+                                    <p class="heading">Receivers added (You)</p>
+                                    <p class="title is-size-4"><?php echo getTotalUserReceiver($_SESSION['login']); ?></p>
+                                </div>
+                            </div>
+                            <div class="column is-half-tablet is-full-mobile">
+                                <div class="box has-text-centered">
+                                    <p class="heading">Signals added (Total)</p>
+                                    <p class="title is-size-4"><?php echo getTotalSignal(); ?></p>
+                                </div>
+                            </div>
+                            <div class="column is-half-tablet is-full-mobile">
+                                <div class="box has-text-centered">
+                                    <p class="heading">Receivers added (Total)</p>
+                                    <p class="title is-size-4"><?php echo getTotalReceiver(); ?></p>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -138,6 +178,13 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
             repository: "Spotted",
             selector: "#feed",
             limit: 5
+        });
+
+        $(document).ready(function() {
+            $(".navbar-burger").click(function() {
+                $(".navbar-burger").toggleClass("is-active");
+                $(".navbar-menu").toggleClass("is-active");
+            });
         });
     </script>
 

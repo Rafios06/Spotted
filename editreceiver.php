@@ -38,6 +38,6 @@ if (getTypeFromUserID($_SESSION['login']) === 1) {
 }
 
 // Go to newreceiver.php with Success
-header("Location: newreceiver.php?e=0");
+header("Location: receiver.php?id=".$rID);
 die();
 ?>

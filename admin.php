@@ -3,9 +3,17 @@
 require("checkconnect.php");
 require("configsql.php");
 require("getstats.php");
+require("getlists.php");
 require("searchengine.php");
 
-$currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+// Check if admin
+if(getTypeFromUserID($_SESSION["login"]) != 1){
+    header("Location: index.php");
+    exit();
+}
+
+$currentPage = htmlentities(isset($_GET['page']) ? $_GET['page'] : 1);
+$search = isset($_GET['s']) ? $_GET['s'] : "";
 
 // Check if not empty
 if ("" == trim($currentPage) || $currentPage <= 0) {
@@ -19,7 +27,7 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Spotted - My signals</title>
+    <title>Spotted - Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/octicons@4.4.0/build/font/octicons.css">
@@ -109,13 +117,12 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title">
-                        <span>My signals</span>
-                        <a class="button is-primary navbar-end" href="addsignal.php">Add</a>
+                        <span>Users</span>
                     </p>
                 </header>
                 <div class="card-content">
                     <div class="content">
-                        <?php getSignalByUser($_SESSION['login'], 10, $currentPage); ?>
+                        <?php getUsers($_SESSION['login'], 10, $currentPage); ?>
                     </div>
                 </div>
             </div>
@@ -154,6 +161,12 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
                                 <div class="box has-text-centered">
                                     <p class="heading">Receivers added (Total)</p>
                                     <p class="title is-size-4"><?php echo getTotalReceiver(); ?></p>
+                                </div>
+                            </div>
+                            <div class="column is-half-tablet is-full-mobile">
+                                <div class="box has-text-centered">
+                                    <p class="heading">Users</p>
+                                    <p class="title is-size-4"><?php echo getTotalUser(); ?></p>
                                 </div>
                             </div>
                         </div>

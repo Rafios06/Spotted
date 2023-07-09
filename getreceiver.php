@@ -33,11 +33,11 @@ function getReceiverDetails($userId, $receiverId)
     $stmt->close();
 
     return array(
-        'owner' => 'N/A',
-        'title' => 'N/A',
-        'location' => 'N/A',
-        'device' => 'N/A',
-        'antenna' => 'N/A'
+        'owner' => 'unknown',
+        'title' => 'unknown',
+        'location' => 'unknown',
+        'device' => 'unknown',
+        'antenna' => 'unknown'
     );
 }
 

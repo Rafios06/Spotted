@@ -26,7 +26,7 @@ function getSignalDetails($userId, $signalId)
                 $detailsReceiver = getReceiverDetails($userId, $receiverID);
                 $infoReceiver = '<a href="receiver.php?id=' . $receiverID . '">' . $detailsReceiver['title'] . ' (' . $detailsReceiver['location'] . ' | ' . $detailsReceiver['device'] . ' | ' . $detailsReceiver['antenna'] . ')' . '</a>';
 
-                $comment = base64_decode($Signal_Description);
+                $comment = $Signal_Description;
 
                 // Generate title from comment
                 $line = preg_split('#\r?\n#', ltrim($comment), 2)[0];
@@ -37,7 +37,9 @@ function getSignalDetails($userId, $signalId)
                 // Generate little comment
                 $wordsComment = explode(" ", $comment);
                 $partsComment = array_slice($wordsComment, 0, 32);
-                $littleComment = preg_replace("/[^a-zA-Z0-9À-ÿ\s]/u", "", implode(" ", $partsComment));
+
+                $littleComment = preg_replace('/(?:\#[^\s]+|!\[[^\]]*\]\((?:https?|ftp):\/\/[\S]+\))/u', '', implode(' ', $partsComment));
+                $littleComment = preg_replace('/#/', '', $littleComment);
 
                 return array(
                     'owner' => $Signal_Owner_ID,
@@ -58,14 +60,14 @@ function getSignalDetails($userId, $signalId)
     $stmt->close();
 
     return array(
-        'owner' => 'N/A',
-        'private' => 'N/A',
-        'frequency' => 'N/A',
-        'time' => 'N/A',
-        'receiver' => 'N/A',
-        'sn' => 'N/A',
-        'title' => 'N/A',
-        'comment' => 'N/A',
-        'link' => 'N/A'
+        'owner' => 'unknown',
+        'private' => 'unknown',
+        'frequency' => 'unknown',
+        'time' => 'unknown',
+        'receiver' => 'unknown',
+        'sn' => 'unknown',
+        'title' => 'unknown',
+        'comment' => 'unknown',
+        'link' => 'unknown'
     );
 }

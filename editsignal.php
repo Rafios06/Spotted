@@ -16,7 +16,7 @@ $sfrequencyunit = mysqli_real_escape_string($mysqli,$_POST["sfrequencyunit"]);
 $stime = mysqli_real_escape_string($mysqli,$_POST["stime"]);
 $sreceiver = mysqli_real_escape_string($mysqli,$_POST["sreceiver"]);
 $snoise = mysqli_real_escape_string($mysqli,$_POST["snoise"]);
-$scomment = mysqli_real_escape_string($mysqli,base64_encode($_POST["scomment"]));
+$scomment = $_POST["scomment"];
 $slink = mysqli_real_escape_string($mysqli,$_POST["slink"]);
 $suser = intval($_SESSION['login']);
 $sprivate = 1;
@@ -53,6 +53,6 @@ if (getTypeFromUserID($_SESSION['login']) === 1) {
 }
 
 // Goto to newsignal.php with Success
-header("Location: newsignal.php?e=0");
+header("Location: signal.php?id=". $sID);
 die();
 ?>

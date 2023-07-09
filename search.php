@@ -5,7 +5,8 @@ require("configsql.php");
 require("getstats.php");
 require("searchengine.php");
 
-$currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+$currentPage = htmlentities(isset($_GET['page']) ? $_GET['page'] : 1);
+$search = isset($_GET['s']) ? $_GET['s'] : "";
 
 // Check if not empty
 if ("" == trim($currentPage) || $currentPage <= 0) {
@@ -19,7 +20,7 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Spotted - My signals</title>
+    <title>Spotted - <?php echo htmlentities($search); ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/octicons@4.4.0/build/font/octicons.css">
@@ -32,10 +33,6 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <style>
-        .navbar-item .field:not(.is-expanded):hover {
-            width: 18rem;
-        }
-        
         .gha-footer {
             display: none;
         }
@@ -43,13 +40,17 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
         .gha-header {
             width: calc(100%);
         }
+
+        .navbar-item .field:not(.is-expanded):hover {
+            width: 18rem;
+        }
     </style>
 
 </head>
 
 <body>
 
-<nav class="navbar is-light has-shadow" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-light has-shadow" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="index.php">
                 <img src="res/svg/icon.svg" width="28" height="28" alt="Spotted">
@@ -108,22 +109,23 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
         <div class="column is-three-quarters" style="margin-left: 1em;">
             <div class="card">
                 <header class="card-header">
-                    <p class="card-header-title">
-                        <span>My signals</span>
-                        <a class="button is-primary navbar-end" href="addsignal.php">Add</a>
+                    <p class="card-header-title" style="max-width: 32ch; white-space: nowrap; overflow: hidden;">
+                        Search : <?php echo htmlentities($search); ?>
                     </p>
                 </header>
                 <div class="card-content">
                     <div class="content">
-                        <?php getSignalByUser($_SESSION['login'], 10, $currentPage); ?>
+
+                        <?php getSignalByKeyword($_SESSION['login'], 10, $currentPage, $search); ?>
+
                     </div>
                 </div>
             </div>
-            <br>
         </div>
 
         <div class="column" style="margin-right: 1em;">
-            <div class="card">
+
+        <div class="card">
                 <header class="card-header">
                     <p class="card-header-title">
                         Statistics
@@ -157,6 +159,7 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -171,23 +174,23 @@ if ("" == trim($currentPage) || $currentPage <= 0) {
                 </header>
                 <div id="feed"></div>
             </div>
+
         </div>
     </div>
 
-
     <script>
-        GitHubActivity.feed({
-            username: "Rafios06",
-            repository: "Spotted",
-            selector: "#feed",
-            limit: 5
-        });
-
         $(document).ready(function() {
             $(".navbar-burger").click(function() {
                 $(".navbar-burger").toggleClass("is-active");
                 $(".navbar-menu").toggleClass("is-active");
             });
+        });
+
+        GitHubActivity.feed({
+            username: "Rafios06",
+            repository: "Spotted",
+            selector: "#feed",
+            limit: 5
         });
     </script>
 
