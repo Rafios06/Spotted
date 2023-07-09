@@ -13,7 +13,6 @@ if(getTypeFromUserID($_SESSION["login"]) != 1){
 }
 
 $currentPage = htmlentities(isset($_GET['page']) ? $_GET['page'] : 1);
-$search = isset($_GET['s']) ? $_GET['s'] : "";
 
 // Check if not empty
 if ("" == trim($currentPage) || $currentPage <= 0) {

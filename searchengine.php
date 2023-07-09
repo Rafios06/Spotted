@@ -435,8 +435,8 @@ function getUsers($userID, $perPage, $currentPage)
     }
 
     // Afficher les liens de pagination
-    $totalReceivers = getTotalUserSignal($userID);
-    $totalPages = ceil($totalReceivers / $perPage);
+    $totalUsers = getTotalUser();
+    $totalPages = ceil($totalUsers / $perPage);
 
     $startPage = max(1, $currentPage - 3);
     $endPage = min($totalPages, $currentPage + 3);
@@ -447,7 +447,7 @@ function getUsers($userID, $perPage, $currentPage)
 
     // Bouton "Précédent"
     if ($currentPage > 1) {
-        echo '<li><a class="pagination-link" href="myreceivers.php?page=' . ($currentPage - 1) . '">Back</a></li>';
+        echo '<li><a class="pagination-link" href="admin.php?page=' . ($currentPage - 1) . '">Back</a></li>';
     } else {
         echo '<li><a class="pagination-link" disabled>Back</a></li>';
     }
@@ -457,13 +457,13 @@ function getUsers($userID, $perPage, $currentPage)
         if ($i == $currentPage) {
             echo '<li><a class="pagination-link is-current" aria-current="page">' . $i . '</a></li>';
         } else {
-            echo '<li><a class="pagination-link" href="myreceivers.php?page=' . $i . '">' . $i . '</a></li>';
+            echo '<li><a class="pagination-link" href="admin.php?page=' . $i . '">' . $i . '</a></li>';
         }
     }
 
     // Bouton "Suivant"
     if ($currentPage < $totalPages) {
-        echo '<li><a class="pagination-link" href="myreceivers.php?page=' . ($currentPage + 1) . '">Next</a></li>';
+        echo '<li><a class="pagination-link" href="admin.php?page=' . ($currentPage + 1) . '">Next</a></li>';
     } else {
         echo '<li><a class="pagination-link" disabled>Next</a></li>';
     }
