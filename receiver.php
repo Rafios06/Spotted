@@ -131,6 +131,7 @@ if (!empty($resp)) {
                 <p><strong>Location:</strong> <?= $receiverDetails['location'] ?></p>
                 <p><strong>Device:</strong> <?= $receiverDetails['device'] ?></p>
                 <p><strong>Antenna:</strong> <?= $receiverDetails['antenna'] ?></p>
+                <p><strong>Owner:</strong> <?= getUsernameFromUserID($receiverDetails['owner']) ?></p>
 
                 <?php
                 if ($receiverDetails['location'] != "unknown") {

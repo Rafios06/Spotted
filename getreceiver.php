@@ -11,20 +11,21 @@ function getReceiverDetails($userId, $receiverId)
 
     $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password, 'spotteddb');
 
-    if ($stmt = $mysqli->prepare("SELECT Receiver_ID, Receiver_Owner_ID, Receiver_Title, Receiver_Location, Receiver_Device, Receiver_Antenna FROM `receiver` WHERE Receiver_ID = ?")) {
+    if ($stmt = $mysqli->prepare("SELECT Receiver_ID, Receiver_Owner_ID, Receiver_Title, Receiver_Location, Receiver_Device, Receiver_Antenna, Receiver_Private FROM `receiver` WHERE Receiver_ID = ?")) {
         $stmt->bind_param("s", $receiverId);
         $stmt->execute();
-        $stmt->bind_result($Receiver_ID, $Receiver_Owner_ID, $Receiver_Title, $Receiver_Location, $Receiver_Device, $Receiver_Antenna);
+        $stmt->bind_result($Receiver_ID, $Receiver_Owner_ID, $Receiver_Title, $Receiver_Location, $Receiver_Device, $Receiver_Antenna, $Receiver_Private);
 
         if ($stmt->fetch()) {
-            if ($Receiver_Owner_ID === intval($userId) || $Receiver_Owner_ID === -1 || getTypeFromUserID($userId) === 1) {
+            if ($Receiver_Owner_ID === intval($userId) || getTypeFromUserID($userId) === 1 || $Receiver_Private === 0) {
 
                 return array(
                     'owner' => $Receiver_Owner_ID,
                     'title' => $Receiver_Title,
                     'location' => $Receiver_Location,
                     'device' => $Receiver_Device,
-                    'antenna' => $Receiver_Antenna
+                    'antenna' => $Receiver_Antenna,
+                    'private' => $Receiver_Private
                 );
             }
         }
@@ -37,7 +38,8 @@ function getReceiverDetails($userId, $receiverId)
         'title' => 'unknown',
         'location' => 'unknown',
         'device' => 'unknown',
-        'antenna' => 'unknown'
+        'antenna' => 'unknown',
+        'private' => '1',
     );
 }
 

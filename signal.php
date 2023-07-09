@@ -121,10 +121,10 @@ $signalDetails = getSignalDetails($_SESSION['login'], $signalId);
                 <p><strong>Time:</strong> <?= $signalDetails['time'] ?></p>
                 <p><strong>Receiver:</strong> <?= $signalDetails['receiver'] ?></p>
                 <p><strong>S/N:</strong> <?= $signalDetails['sn'] ?></p>
-                <p>
-                    <strong>Link:</strong> <a href="<?= $signalDetails['link'] ?>" target="_blank"><?= $signalDetails['link'] ?></a>
-                </p>
                 <p><strong>Owner:</strong> <?= getUsernameFromUserID($signalDetails['owner']) ?></p>
+                <p>
+                    <?php if($signalDetails['link'] != "unknown"){echo '<strong>Link:</strong> <a href="'. $signalDetails['link'] .'" target="_blank">'. $signalDetails['link'] .'</a>';}?>
+                </p>
                 <p>
                     <?php echo generateVideoEmbedCode($signalDetails['link']); ?>
                     </iframe>

@@ -14,6 +14,14 @@ $rlocation = $_POST["rlocation"];
 $rdevice = $_POST["rdevice"];
 $rantenna = $_POST["rantenna"];
 
+$rprivate = 1;
+
+if (isset($_POST['rprivate'])) {
+    $rprivate = "0"; // Public
+} else {
+    $rprivate = "1"; // Private
+}
+
 $rowner = intval($_SESSION["login"]);
 
 // Check if not empty
@@ -24,8 +32,8 @@ if ("" == trim($rtitle) || "" == trim($rlocation) || "" == trim($rdevice) || "" 
 }
 
 // Prepare & execute request
-$stmt = $mysqli->prepare("INSERT INTO `receiver` (Receiver_Owner_ID, Receiver_Title, Receiver_Location, Receiver_Device, Receiver_Antenna) VALUES (?,?,?,?,?)");
-$stmt->bind_param("issss", $rowner, $rtitle, $rlocation, $rdevice, $rantenna);
+$stmt = $mysqli->prepare("INSERT INTO `receiver` (Receiver_Owner_ID, Receiver_Title, Receiver_Location, Receiver_Device, Receiver_Antenna, Receiver_Private) VALUES (?,?,?,?,?,?)");
+$stmt->bind_param("issssi", $rowner, $rtitle, $rlocation, $rdevice, $rantenna, $rprivate);
 $stmt->execute();
 
 // Goto to newreceiver.php with Success

@@ -10,14 +10,13 @@ function generateSelectReceivers()
 
     $mysqli = mysqli_connect($SQL_hostname, $SQL_username, $SQL_password, 'spotteddb');
 
-    if ($stmt = $mysqli->prepare("SELECT * FROM receiver WHERE Receiver_Owner_ID = '-1' OR Receiver_Owner_ID = '" . $_SESSION['login'] . "'")) {
+    if ($stmt = $mysqli->prepare("SELECT * FROM receiver WHERE Receiver_Private = 0 OR Receiver_Owner_ID = '" . $_SESSION['login'] . "'")) {
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            // If there are results, display them
             do {
-                $stmt->bind_result($id_receiver, $id_owner, $title_receiver, $location_receiver, $device_receiver, $antenna_receiver);
+                $stmt->bind_result($id_receiver, $id_owner, $title_receiver, $location_receiver, $device_receiver, $antenna_receiver, $private_receiver);
                 if ($id_receiver !== null) {
                     echo '<option value="'.$id_receiver.'">'.$title_receiver.'</option>';
                 }

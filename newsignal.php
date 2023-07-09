@@ -207,7 +207,7 @@ if (!empty($_GET['id'])) {
 
                 <div>
                     <label class="label" for="slink">Link sample</label>
-                    <input class="input" type="text" name="slink" id="slink" value="<?php if ($editorMode) {
+                    <input class="input" type="text" name="slink" id="slink" placeholder="https://www.youtube.com/watch?v=hAAlDoAtV7Y" value="<?php if ($editorMode) {
                                                                                         echo $signalDetails['link'];
                                                                                     } ?>">
                 </div>

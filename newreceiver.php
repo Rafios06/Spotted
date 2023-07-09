@@ -149,6 +149,15 @@ if (!empty($_GET['id'])) {
                                                                                             } ?>" required>
                 </div>
 
+                <div style="margin-top: 0.5em; margin-bottom: 0.5em;">
+                    <label class="checkbox">
+                        <input type="checkbox" name="rprivate" id="rprivate" <?php if ($editorMode && $receiverDetails['private'] === 1) {
+                                                                                    echo " checked";
+                                                                                } ?>>
+                        Private
+                    </label>
+                </div>
+
                 <input style="margin-top: 1em;" class="button" type="submit" <?php if ($editorMode) {
                                                                                     echo 'value="Change"';
                                                                                 } else {

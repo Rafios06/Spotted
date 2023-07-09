@@ -15,6 +15,13 @@ $rtitle = $_POST["rtitle"];
 $rlocation = $_POST["rlocation"];
 $rdevice = $_POST["rdevice"];
 $rantenna = $_POST["rantenna"];
+$rprivate = 1;
+
+if (isset($_POST['rprivate'])) {
+    $rprivate = "0"; // Public
+} else {
+    $rprivate = "1"; // Private
+}
 
 $rowner = intval($_SESSION["login"]);
 
@@ -27,13 +34,13 @@ if ("" == trim($rtitle) || "" == trim($rlocation) || "" == trim($rdevice) || "" 
 
 if (getTypeFromUserID($_SESSION['login']) === 1) {
     // Prepare & execute request
-    $stmt = $mysqli->prepare("UPDATE `receiver` SET Receiver_Title=?, Receiver_Location=?, Receiver_Device=?, Receiver_Antenna=? WHERE Receiver_ID=?");
-    $stmt->bind_param("ssssi", $rtitle, $rlocation, $rdevice, $rantenna, $rID);
+    $stmt = $mysqli->prepare("UPDATE `receiver` SET Receiver_Title=?, Receiver_Location=?, Receiver_Device=?, Receiver_Antenna=?, Receiver_Private=? WHERE Receiver_ID=?");
+    $stmt->bind_param("ssssii", $rtitle, $rlocation, $rdevice, $rantenna, $rprivate, $rID);
     $stmt->execute();
 } else {
     // Prepare & execute request
-    $stmt = $mysqli->prepare("UPDATE `receiver` SET Receiver_Title=?, Receiver_Location=?, Receiver_Device=?, Receiver_Antenna=? WHERE Receiver_ID=? AND Receiver_Owner_ID=?");
-    $stmt->bind_param("ssssii", $rtitle, $rlocation, $rdevice, $rantenna, $rID, $rowner);
+    $stmt = $mysqli->prepare("UPDATE `receiver` SET Receiver_Title=?, Receiver_Location=?, Receiver_Device=?, Receiver_Antenna=?, Receiver_Private=? WHERE Receiver_ID=? AND Receiver_Owner_ID=?");
+    $stmt->bind_param("ssssiii", $rtitle, $rlocation, $rdevice, $rantenna, $rprivate, $rID, $rowner);
     $stmt->execute();
 }
 
