@@ -70,10 +70,10 @@
                                     <div class="field">
                                         <div class="control">
                                             <button class="button" type="submit" style="margin: 0.5em; font-weight: bolder; background-color: #DC5272; color: white;">
-                                                Connexion
+                                                Log in
                                             </button>
                                         </div>
-                                        <a class="forgot-password has-text-centered" style="font-weight: bolder;" href="#">Mot de passe oublié ?</a>
+                                        <a class="forgot-password has-text-centered" style="font-weight: bolder;" href="#">Forget password ?</a>
                                     </div>
                                 </form>
                                 <hr class="solid">
@@ -81,7 +81,7 @@
                                     <div class="control">
                                         <form action="register.php">
                                             <button class="button" style="font-weight: bolder; background-color: #26ADBB; color: white;">
-                                                S'inscrire!
+                                                Create new account
                                             </button>
                                         </form>
                                     </div>

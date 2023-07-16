@@ -78,7 +78,7 @@
                                     <div class="field">
                                         <div class="control">
                                             <button class="button" type="submit" style="margin: 0.5em; font-weight: bolder; background-color: #26ADBB; color: white;">
-                                                S'inscrire!
+                                                Create !
                                             </button>
                                         </div>
                                     </div>
